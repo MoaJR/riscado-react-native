@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import { colors } from "./colors";
 
 const buttonSize = 40;
@@ -39,21 +39,13 @@ export const styles = StyleSheet.create({
     zIndex: -1,
     maxHeight: '33%',
   },
-  listsCounter: {
-    marginBottom: 20,
-  },
-  listsCounterText: {
-    fontSize: 20,
-    color: colors.darkGray,
-    fontWeight: '300',
-  },
   loadingContainer: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
     backgroundColor: colors.white,
     alignItems: 'center',
     justifyContent: 'center',
+    position: 'absolute',
     zIndex: 20,
   },
 });

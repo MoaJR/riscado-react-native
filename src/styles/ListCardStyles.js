@@ -1,14 +1,12 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import { colors } from "./colors";
-
-const buttonSize = 40;
 
 export const styles = StyleSheet.create({
   container: {
     alignSelf: 'center',
   },
   card: {
-    width: 200,
+    width: Dimensions.get('window').width - 60,
     paddingVertical: 15,
     borderRadius: 10,
     marginHorizontal: 10,

@@ -1,21 +1,29 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Alert, Animated, Modal, Text, TouchableOpacity, View } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
+import {  deleteDoc, doc } from "firebase/firestore";
 
 import { styles } from "../styles/ListCardStyles";
 import ProgressBar from "./ProgressBar";
 import ListModal from "./ListModal";
+import { db } from "../config/FirebaseProvider";
 
-function ListCard({ item, setData, data }) {
+
+function ListCard({ item }) {
   const [deleteVisible, setDeleteVisible] = useState(false);
   const [ListModalVisible, setListModalVisible] = useState(false);
 
   const handleShowListModal = () => {
-    setListModalVisible(!ListModalVisible);
+    deleteVisible ? setDeleteVisible(false) : setListModalVisible(!ListModalVisible);
+  };
+
+  const deleteById = async (id) => {
+    const tasksRef = await doc(db, "tasks", id);
+    await deleteDoc(tasksRef);
   };
 
   const handleDelete = () => {
-    const newData = data.filter((list) => list.id !== item.id);
+    
     Alert.alert(
       "Deletar Lista",
       `Você tem certeza que deseja deletar a lista: ${item.name}?`,
@@ -26,7 +34,7 @@ function ListCard({ item, setData, data }) {
         },
         {
           text: "Deletar",
-          onPress: () => setData(newData),
+          onPress: () => deleteById(item.id),
         },
       ],
       { cancelable: true }
@@ -53,16 +61,8 @@ function ListCard({ item, setData, data }) {
       useNativeDriver: true,
     }).start();
     return () => {
-      Animated.timing(transformAnim, {
-        toValue: 0,
-        duration: 1000,
-        useNativeDriver: true,
-      }).reset();
-      Animated.timing(opacityAnim, {
-        toValue: 0,
-        duration: 1000,
-        useNativeDriver: true,
-      }).reset();
+      Animated.timing(transformAnim, {}).reset();
+      Animated.timing(opacityAnim, {}).reset();
     };
   }, [deleteVisible]);
 
@@ -75,8 +75,6 @@ function ListCard({ item, setData, data }) {
         <ListModal
           handleModal={handleShowListModal}
           item={item}
-          data={data}
-          setData={setData}
         />
       </Modal>
       <TouchableOpacity
@@ -125,7 +123,8 @@ function ListCard({ item, setData, data }) {
         <ProgressBar item={item} />
       </TouchableOpacity>
       {deleteVisible ? (
-        <Animated.View style={{ transform: [{translateY: transformAnim}], opacity: opacityAnim }} >
+        <Animated.View
+          style={{ transform: [{ translateY: transformAnim }], opacity: opacityAnim }}>
           <TouchableOpacity
             onPress={handleDelete}
             style={styles.deleteContainer}>

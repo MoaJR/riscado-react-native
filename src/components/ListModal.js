@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -12,16 +12,23 @@ import { AntDesign } from "@expo/vector-icons";
 
 import { styles } from "../styles/ListModalStyles";
 import ItemList from "./ItemList";
+import { arrayUnion, doc, updateDoc } from "firebase/firestore";
+import { db } from "../config/FirebaseProvider";
+import { DataContext } from "../context/DataContext";
 
-function ListModal({ handleModal, item, data, setData }) {
+function ListModal({ handleModal, item }) {
+  const { data } = useContext(DataContext);
+
   const [task, setTask] = useState("");
-  const [taskList, setTaskList] = useState(item.todos);
   const [error, setError] = useState(false);
 
+  const taskList = data.find((list) => list.id === item.id).todos;
   const refInput = useRef();
 
-  const addTask = () => {
-    if(task === "") {
+  const docRef = doc(db, "tasks", item.id);
+
+  const addTask = async () => {
+    if (task === "") {
       setError(true);
       setTimeout(() => {
         setError(false);
@@ -33,62 +40,33 @@ function ListModal({ handleModal, item, data, setData }) {
       name: `${task.charAt(0).toUpperCase()}${task.slice(1)}`,
       completed: false,
     };
-    const newData = data.map((list) => {
-      if (list.id === item.id) {
-        return {
-          ...list,
-          todos: [...list.todos, newTask],
-        };
-      } else {
-        return list;
-      }
+    await updateDoc(docRef, {
+      todos: arrayUnion(newTask),
     });
-    setTaskList([...taskList, newTask]);
-    setData(newData);
     refInput.current.focus();
     setTask("");
     Keyboard.isVisible();
   };
 
   const checkCompleted = (id) => {
-    const newList = taskList.map((task) => {
-      if (task.id === id) {
-        return {
-          ...task,
-          completed: !task.completed,
-        };
-      } else {
-        return task;
-      }
+    updateDoc(docRef, {
+      todos: taskList.map((task) => {
+        if (task.id === id) {
+          return {
+            ...task,
+            completed: !task.completed,
+          };
+        } else {
+          return task;
+        }
+      }),
     });
-    setTaskList(newList);
-    const newData = data.map((list) => {
-      if (list.id === item.id) {
-        return {
-          ...list,
-          todos: newList,
-        };
-      } else {
-        return list;
-      }
-    });
-    setData(newData);
   };
 
   const deleteTask = (id) => {
-    const newList = taskList.filter((task) => task.id !== id);
-    setTaskList(newList);
-    const newData = data.map((list) => {
-      if (list.id === item.id) {
-        return {
-          ...list,
-          todos: newList,
-        };
-      } else {
-        return list;
-      }
+    updateDoc(docRef, {
+      todos: taskList.filter((task) => task.id !== id),
     });
-    setData(newData);
   };
 
   const totalTasks = taskList.length;
@@ -121,14 +99,10 @@ function ListModal({ handleModal, item, data, setData }) {
           <AntDesign
             name="plus"
             style={styles.createButtonText}
-            />
+          />
         </TouchableOpacity>
       </View>
-      {
-        error ? (
-          <Text style={styles.errorText}>Digite uma tarefa</Text>
-        ) : null
-      }
+      {error ? <Text style={styles.errorText}>Digite uma tarefa</Text> : null}
       <ScrollView
         style={styles.tasksContainer}
         showsVerticalScrollIndicator={false}>
