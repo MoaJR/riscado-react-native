@@ -5,7 +5,7 @@ export const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     position: 'absolute',
-    top: 50,
+    top: 80,
   },
   title: {
     fontSize: 40,

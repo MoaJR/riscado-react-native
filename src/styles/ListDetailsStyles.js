@@ -7,6 +7,7 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.white,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingTop: '20%',
   },
   title: {
     fontSize: 30,
@@ -27,9 +28,9 @@ export const styles = StyleSheet.create({
     color: colors.darkGray,
     marginBottom: 20,
   },
-  closeModalButton: {
+  closeButton: {
     position: 'absolute',
-    top: 20,
+    top: 80,
     left: 20,
     padding: 5,
   },

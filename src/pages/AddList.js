@@ -14,7 +14,7 @@ import {
 import { styles } from "../styles/AddListStyles";
 import { db } from "../config/FirebaseProvider";
 
-function AddList() {
+function AddList({ navigation }) {
   const colorsArray = [
     "#5CD859",
     "#2bbef7",
@@ -54,7 +54,7 @@ function AddList() {
       return;
     }
     addList();
-
+    navigation.goBack();
     Keyboard.dismiss();
   };
 
@@ -64,8 +64,8 @@ function AddList() {
       behavior="height">
       <Text style={styles.title}>Criar Lista</Text>
       <TouchableOpacity
-        style={styles.closeModalButton}
-        onPress={() => {}}>
+        style={styles.closeButton}
+        onPress={() => navigation.goBack()}>
         <AntDesign
           name="left"
           style={styles.backIcon}

@@ -19,7 +19,7 @@ const PageCounter = ({ scrollX, slideRef }) => {
             });
             const widthR = scrollX.interpolate({
               inputRange,
-              outputRange: [14, 14, 14],
+              outputRange: [12, 22, 12],
               extrapolate: "clamp",
             });
             const marginBottom = scrollX.interpolate({
@@ -32,7 +32,7 @@ const PageCounter = ({ scrollX, slideRef }) => {
               <AnimationTouch
                 onPress={() => { slideRef.current.scrollToIndex({ index, animated: true }) }}
                 key={index.toString()}
-                style={[styles.dot, { opacity, backgroundColor, width: widthR, height: widthR, transform: [{ translateY: marginBottom }]}]}
+                style={[styles.dot, { opacity, backgroundColor, width: widthR, }]}
               />
             );
           })
@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
   dot: {
     borderRadius: 10,
     marginHorizontal: 6,
+    height: 12,
     backgroundColor: colors.primary,
     alignItems: "center",
     alignContent: "center",

@@ -16,7 +16,8 @@ import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { db } from "../config/FirebaseProvider";
 import { DataContext } from "../context/DataContext";
 
-function ListDetails({ handleModal, item }) {
+function ListDetails({ route, navigation }) {
+  const { item } = route.params;
   const { data } = useContext(DataContext);
 
   const [task, setTask] = useState("");
@@ -125,8 +126,8 @@ function ListDetails({ handleModal, item }) {
         )}
       </ScrollView>
       <TouchableOpacity
-        style={styles.closeModalButton}
-        onPress={handleModal}>
+        style={styles.closeButton}
+        onPress={() => navigation.navigate('Home')}>
         <AntDesign
           name="left"
           style={styles.backIcon}

@@ -19,7 +19,7 @@ import { DataContext } from "../context/DataContext";
 import PageCounter from "../components/PageCounter";
 import { StatusBar } from "expo-status-bar";
 
-export default function Home() {
+export default function Home({navigation}) {
   const { data, setData } = useContext(DataContext);
 
   const [loading, setLoading] = useState(true);
@@ -50,7 +50,7 @@ export default function Home() {
       <Logo />
       <TouchableOpacity
         style={styles.addContainer}
-        onPress={() => {}}>
+        onPress={() => navigation.navigate('AddList')}>
         <View style={styles.addButton}>
           <AntDesign
             name="plus"
@@ -62,6 +62,7 @@ export default function Home() {
       <View style={styles.listsContainer}>
         {data.length > 0 ? (
           <FlatList
+            scrollEventThrottle={32}
             extraData={data}
             snapToAlignment="center"
             bounces={false}
@@ -77,7 +78,7 @@ export default function Home() {
             data={data}
             horizontal
             keyExtractor={(item) => item.id}
-            renderItem={({ item }) => <ListCard item={item} slideRef={slideRef} />}
+            renderItem={({ item }) => <ListCard item={item} slideRef={slideRef} navigation={navigation} />}
           />
         ) : null}
       </View>

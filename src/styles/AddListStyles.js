@@ -14,9 +14,9 @@ export const styles = StyleSheet.create({
     color: colors.darkGray,
     marginBottom: 20,
   },
-  closeModalButton: {
+  closeButton: {
     position: 'absolute',
-    top: 20,
+    top: 80,
     left: 20,
     padding: 5,
   },
