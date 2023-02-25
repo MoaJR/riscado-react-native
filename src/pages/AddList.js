@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { doc, setDoc } from "firebase/firestore";
 import { AntDesign } from "@expo/vector-icons";
 import {
+  ActivityIndicator,
   Keyboard,
   KeyboardAvoidingView,
   Text,
@@ -10,10 +11,10 @@ import {
   View,
 } from "react-native";
 
-import { styles } from "../styles/AddListModalStyles";
+import { styles } from "../styles/AddListStyles";
 import { db } from "../config/FirebaseProvider";
 
-function AddListModal({ onPress: handleModal }) {
+function AddList({ navigation }) {
   const colorsArray = [
     "#5CD859",
     "#2bbef7",
@@ -29,15 +30,19 @@ function AddListModal({ onPress: handleModal }) {
     colorsArray[Math.floor(Math.random() * colorsArray.length)]
   );
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const addList = async () => {
+    setLoading(true);
+    const date = new Date();
     const listObject = {
-      id: (Math.random(9999) * 10).toString().split(".")[1],
+      id: date.toUTCString(),
       name: `${name.charAt(0).toUpperCase()}${name.slice(1)}`,
       backgroundColor: color,
       todos: [],
     };
     await setDoc(doc(db, "tasks", listObject.id), listObject);
+    setLoading(false);
   };
 
   const addListSubmit = () => {
@@ -49,7 +54,7 @@ function AddListModal({ onPress: handleModal }) {
       return;
     }
     addList();
-    handleModal();
+    navigation.goBack();
     Keyboard.dismiss();
   };
 
@@ -59,14 +64,15 @@ function AddListModal({ onPress: handleModal }) {
       behavior="height">
       <Text style={styles.title}>Criar Lista</Text>
       <TouchableOpacity
-        style={styles.closeModalButton}
-        onPress={handleModal}>
+        style={styles.closeButton}
+        onPress={() => navigation.goBack()}>
         <AntDesign
           name="left"
           style={styles.backIcon}
         />
       </TouchableOpacity>
       <TextInput
+        autoFocus
         style={styles.input}
         placeholder="Nome da Lista"
         value={name}
@@ -84,14 +90,21 @@ function AddListModal({ onPress: handleModal }) {
         ))}
       </View>
       <TouchableOpacity style={[styles.createButton, { backgroundColor: color }]}>
-        <Text
-          style={styles.createButtonText}
-          onPress={addListSubmit}>
-          Adicionar
-        </Text>
+        {loading ? (
+          <ActivityIndicator
+            size="small"
+            color="#fff"
+          />
+        ) : (
+          <Text
+            style={styles.createButtonText}
+            onPress={addListSubmit}>
+            Adicionar
+          </Text>
+        )}
       </TouchableOpacity>
     </KeyboardAvoidingView>
   );
 }
 
-export default AddListModal;
+export default AddList;

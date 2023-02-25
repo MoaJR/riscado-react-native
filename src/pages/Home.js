@@ -2,9 +2,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Animated,
-  Dimensions,
   FlatList,
-  Modal,
   Text,
   TouchableOpacity,
   View,
@@ -13,22 +11,18 @@ import { AntDesign } from "@expo/vector-icons";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../config/FirebaseProvider";
 
-import Logo from "./Logo";
+import Logo from "../components/Logo";
 import { styles } from "../styles/HomeStyles";
-import AddListModal from "./AddListModal";
-import ListCard from "./ListCard";
+import AddList from "./AddList";
+import ListCard from "../components/ListCard";
 import { DataContext } from "../context/DataContext";
-import PageCounter from "./PageCounter";
+import PageCounter from "../components/PageCounter";
+import { StatusBar } from "expo-status-bar";
 
-export default function Home() {
+export default function Home({navigation}) {
   const { data, setData } = useContext(DataContext);
 
-  const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(true);
-
-  const handleModal = () => {
-    setModalVisible(!modalVisible);
-  };
 
   useEffect(() => {
     setLoading(true);
@@ -53,16 +47,10 @@ export default function Home() {
           />
         </View>
       ) : null}
-      <Modal
-        animationType="slide"
-        visible={modalVisible}
-        onRequestClose={handleModal}>
-        <AddListModal onPress={handleModal} />
-      </Modal>
       <Logo />
       <TouchableOpacity
         style={styles.addContainer}
-        onPress={handleModal}>
+        onPress={() => navigation.navigate('AddList')}>
         <View style={styles.addButton}>
           <AntDesign
             name="plus"
@@ -74,6 +62,8 @@ export default function Home() {
       <View style={styles.listsContainer}>
         {data.length > 0 ? (
           <FlatList
+            scrollEventThrottle={32}
+            extraData={data}
             snapToAlignment="center"
             bounces={false}
             pagingEnabled
@@ -88,11 +78,12 @@ export default function Home() {
             data={data}
             horizontal
             keyExtractor={(item) => item.id}
-            renderItem={({ item }) => <ListCard item={item} />}
+            renderItem={({ item }) => <ListCard item={item} slideRef={slideRef} navigation={navigation} />}
           />
         ) : null}
       </View>
-      <PageCounter scrollX={scrollX} />
+      <PageCounter scrollX={scrollX} slideRef={slideRef} />
+      <StatusBar style="auto" />
     </View>
   );
 }

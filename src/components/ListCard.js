@@ -1,20 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Alert, Animated, Modal, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Animated, Text, TouchableOpacity, View } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import {  deleteDoc, doc } from "firebase/firestore";
+import { deleteDoc, doc } from "firebase/firestore";
 
 import { styles } from "../styles/ListCardStyles";
 import ProgressBar from "./ProgressBar";
-import ListModal from "./ListModal";
 import { db } from "../config/FirebaseProvider";
 
-
-function ListCard({ item }) {
+function ListCard({ item, slideRef, navigation }) {
   const [deleteVisible, setDeleteVisible] = useState(false);
-  const [ListModalVisible, setListModalVisible] = useState(false);
 
-  const handleShowListModal = () => {
-    deleteVisible ? setDeleteVisible(false) : setListModalVisible(!ListModalVisible);
+  const handleNavigate = () => {
+    deleteVisible
+      ? setDeleteVisible(false)
+      : navigation.navigate("ListDetails", { item: item }); //arrumar aqui
   };
 
   const deleteById = async (id) => {
@@ -23,7 +22,6 @@ function ListCard({ item }) {
   };
 
   const handleDelete = () => {
-    
     Alert.alert(
       "Deletar Lista",
       `Você tem certeza que deseja deletar a lista: ${item.name}?`,
@@ -34,7 +32,10 @@ function ListCard({ item }) {
         },
         {
           text: "Deletar",
-          onPress: () => deleteById(item.id),
+          onPress: () => {
+            slideRef.current.scrollToItem({ item: item });
+            deleteById(item.id);
+          },
         },
       ],
       { cancelable: true }
@@ -68,73 +69,66 @@ function ListCard({ item }) {
 
   return (
     <View style={styles.container}>
-      <Modal
-        animationType="slide"
-        visible={ListModalVisible}
-        onRequestClose={handleShowListModal}>
-        <ListModal
-          handleModal={handleShowListModal}
-          item={item}
-        />
-      </Modal>
-      <TouchableOpacity
-        onLongPress={handleShowDelete}
-        onPress={handleShowListModal}
-        style={[styles.card, { backgroundColor: item.backgroundColor }]}>
-        <Text
-          numberOfLines={1}
-          style={[
-            styles.listTitle,
-            item.todos.every((todo) => todo.completed) && item.todos.length > 0
-              ? { textDecorationLine: "line-through" }
-              : { textDecorationLine: "none" },
-          ]}>
-          {item.todos.every((todo) => todo.completed) ? ` ${item.name} ` : item.name}
-        </Text>
-        <View style={styles.countContainer}>
-          <View style={styles.tasksTextContainer}>
-            <Text style={styles.listCount}>{item.todos.length}</Text>
-            <Text style={styles.listTasksText}>
-              {item.todos.length !== 1 ? " tarefas" : " tarefa"}
-            </Text>
+      <View style={styles.cardContainer}>
+        <TouchableOpacity
+          onLongPress={handleShowDelete}
+          onPress={handleNavigate}
+          style={[styles.card, { backgroundColor: item.backgroundColor }]}>
+          <Text
+            numberOfLines={1}
+            style={[
+              styles.listTitle,
+              item.todos.every((todo) => todo.completed) && item.todos.length > 0
+                ? { textDecorationLine: "line-through" }
+                : { textDecorationLine: "none" },
+            ]}>
+            {item.todos.every((todo) => todo.completed) ? ` ${item.name} ` : item.name}
+          </Text>
+          <View style={styles.countContainer}>
+            <View style={styles.tasksTextContainer}>
+              <Text style={styles.listCount}>{item.todos.length}</Text>
+              <Text style={styles.listTasksText}>
+                {item.todos.length !== 1 ? " tarefas" : " tarefa"}
+              </Text>
+            </View>
+            <View style={styles.tasksTextContainer}>
+              <Text style={styles.listCount}>
+                {item.todos.filter((todo) => todo.completed).length}
+              </Text>
+              <Text style={styles.listTasksText}>
+                {item.todos.filter((todo) => todo.completed).length !== 1
+                  ? " completas"
+                  : " completa"}
+              </Text>
+            </View>
           </View>
-          <View style={styles.tasksTextContainer}>
-            <Text style={styles.listCount}>
-              {item.todos.filter((todo) => todo.completed).length}
-            </Text>
-            <Text style={styles.listTasksText}>
-              {item.todos.filter((todo) => todo.completed).length !== 1
-                ? " completas"
-                : " completa"}
-            </Text>
-          </View>
-        </View>
-        {item.todos.every((todo) => todo.completed) && item.todos.length > 0 ? (
-          <AntDesign
-            name="checkcircle"
-            style={styles.checkIconList}
-          />
-        ) : (
-          <AntDesign
-            name="checkcircleo"
-            style={styles.checkIconList}
-          />
-        )}
-        <ProgressBar item={item} />
-      </TouchableOpacity>
-      {deleteVisible ? (
-        <Animated.View
-          style={{ transform: [{ translateY: transformAnim }], opacity: opacityAnim }}>
-          <TouchableOpacity
-            onPress={handleDelete}
-            style={styles.deleteContainer}>
+          {item.todos.every((todo) => todo.completed) && item.todos.length > 0 ? (
             <AntDesign
-              name="delete"
-              style={styles.deleteIcon}
+              name="checkcircle"
+              style={styles.checkIconList}
             />
-          </TouchableOpacity>
-        </Animated.View>
-      ) : null}
+          ) : (
+            <AntDesign
+              name="checkcircleo"
+              style={styles.checkIconList}
+            />
+          )}
+          <ProgressBar item={item} />
+        </TouchableOpacity>
+        {deleteVisible ? (
+          <Animated.View
+            style={{ transform: [{ translateY: transformAnim }], opacity: opacityAnim }}>
+            <TouchableOpacity
+              onPress={handleDelete}
+              style={styles.deleteContainer}>
+              <AntDesign
+                name="delete"
+                style={styles.deleteIcon}
+              />
+            </TouchableOpacity>
+          </Animated.View>
+        ) : null}
+      </View>
     </View>
   );
 }

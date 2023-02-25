@@ -5,11 +5,14 @@ export const styles = StyleSheet.create({
   container: {
     alignSelf: 'center',
   },
+  cardContainer: {
+    width: Dimensions.get('window').width,
+    alignItems: 'center',
+  },
   card: {
-    width: Dimensions.get('window').width - 60,
+    width: '80%',
     paddingVertical: 15,
     borderRadius: 10,
-    marginHorizontal: 10,
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 2,
