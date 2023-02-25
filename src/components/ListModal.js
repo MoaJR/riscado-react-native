@@ -36,8 +36,8 @@ function ListModal({ handleModal, item }) {
       return;
     }
     const newTask = {
-      id: (Math.random(9999) * 10).toString().split(".")[1],
-      name: `${task.charAt(0).toUpperCase()}${task.slice(1)}`,
+      id: JSON.stringify(Date.now()),
+      name: task,
       completed: false,
     };
     await updateDoc(docRef, {
@@ -84,6 +84,8 @@ function ListModal({ handleModal, item }) {
 
       <View style={{ alignItems: "center", flexDirection: "row" }}>
         <TextInput
+          autoFocus
+          autoCapitalize="sentences"
           ref={refInput}
           style={styles.input}
           placeholder="Nome da Tarefa"

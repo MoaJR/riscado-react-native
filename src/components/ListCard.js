@@ -1,15 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Alert, Animated, Modal, Text, TouchableOpacity, View } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import {  deleteDoc, doc } from "firebase/firestore";
+import { deleteDoc, doc } from "firebase/firestore";
 
 import { styles } from "../styles/ListCardStyles";
 import ProgressBar from "./ProgressBar";
 import ListModal from "./ListModal";
 import { db } from "../config/FirebaseProvider";
 
-
-function ListCard({ item }) {
+function ListCard({ item, slideRef }) {
   const [deleteVisible, setDeleteVisible] = useState(false);
   const [ListModalVisible, setListModalVisible] = useState(false);
 
@@ -23,7 +22,6 @@ function ListCard({ item }) {
   };
 
   const handleDelete = () => {
-    
     Alert.alert(
       "Deletar Lista",
       `Você tem certeza que deseja deletar a lista: ${item.name}?`,
@@ -34,7 +32,10 @@ function ListCard({ item }) {
         },
         {
           text: "Deletar",
-          onPress: () => deleteById(item.id),
+          onPress: () => {
+            slideRef.current.scrollToItem({item: item});
+            deleteById(item.id);
+          },
         },
       ],
       { cancelable: true }

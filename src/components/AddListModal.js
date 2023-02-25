@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { doc, setDoc } from "firebase/firestore";
 import { AntDesign } from "@expo/vector-icons";
 import {
+  ActivityIndicator,
   Keyboard,
   KeyboardAvoidingView,
   Text,
@@ -29,15 +30,18 @@ function AddListModal({ onPress: handleModal }) {
     colorsArray[Math.floor(Math.random() * colorsArray.length)]
   );
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const addList = async () => {
+    setLoading(true);
     const listObject = {
-      id: (Math.random(9999) * 10).toString().split(".")[1],
+      id: JSON.stringify(Date.now()),
       name: `${name.charAt(0).toUpperCase()}${name.slice(1)}`,
       backgroundColor: color,
       todos: [],
     };
     await setDoc(doc(db, "tasks", listObject.id), listObject);
+    setLoading(false);
   };
 
   const addListSubmit = () => {
@@ -67,6 +71,7 @@ function AddListModal({ onPress: handleModal }) {
         />
       </TouchableOpacity>
       <TextInput
+        autoFocus
         style={styles.input}
         placeholder="Nome da Lista"
         value={name}
@@ -84,11 +89,18 @@ function AddListModal({ onPress: handleModal }) {
         ))}
       </View>
       <TouchableOpacity style={[styles.createButton, { backgroundColor: color }]}>
-        <Text
-          style={styles.createButtonText}
-          onPress={addListSubmit}>
-          Adicionar
-        </Text>
+        {loading ? (
+          <ActivityIndicator
+            size="small"
+            color="#fff"
+          />
+        ) : (
+          <Text
+            style={styles.createButtonText}
+            onPress={addListSubmit}>
+            Adicionar
+          </Text>
+        )}
       </TouchableOpacity>
     </KeyboardAvoidingView>
   );

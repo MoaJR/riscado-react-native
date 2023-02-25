@@ -19,6 +19,7 @@ import AddListModal from "./AddListModal";
 import ListCard from "./ListCard";
 import { DataContext } from "../context/DataContext";
 import PageCounter from "./PageCounter";
+import { StatusBar } from "expo-status-bar";
 
 export default function Home() {
   const { data, setData } = useContext(DataContext);
@@ -74,6 +75,7 @@ export default function Home() {
       <View style={styles.listsContainer}>
         {data.length > 0 ? (
           <FlatList
+            extraData={data}
             snapToAlignment="center"
             bounces={false}
             pagingEnabled
@@ -88,11 +90,12 @@ export default function Home() {
             data={data}
             horizontal
             keyExtractor={(item) => item.id}
-            renderItem={({ item }) => <ListCard item={item} />}
+            renderItem={({ item }) => <ListCard item={item} slideRef={slideRef} />}
           />
         ) : null}
       </View>
-      <PageCounter scrollX={scrollX} />
+      <PageCounter scrollX={scrollX} slideRef={slideRef} />
+      <StatusBar style="auto" />
     </View>
   );
 }
