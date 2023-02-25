@@ -1,6 +1,6 @@
 import React from 'react'
-import Home from './src/components/Home';
 import DataContextProvider from './src/context/DataContext';
+import Home from './src/pages/Home';
 
 export default function App() {
 

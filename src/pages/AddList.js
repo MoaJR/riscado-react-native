@@ -11,10 +11,10 @@ import {
   View,
 } from "react-native";
 
-import { styles } from "../styles/AddListModalStyles";
+import { styles } from "../styles/AddListStyles";
 import { db } from "../config/FirebaseProvider";
 
-function AddListModal({ onPress: handleModal }) {
+function AddList({ onPress: handleModal }) {
   const colorsArray = [
     "#5CD859",
     "#2bbef7",
@@ -34,8 +34,9 @@ function AddListModal({ onPress: handleModal }) {
 
   const addList = async () => {
     setLoading(true);
+    const date = new Date();
     const listObject = {
-      id: JSON.stringify(Date.now()),
+      id: date.toUTCString(),
       name: `${name.charAt(0).toUpperCase()}${name.slice(1)}`,
       backgroundColor: color,
       todos: [],
@@ -106,4 +107,4 @@ function AddListModal({ onPress: handleModal }) {
   );
 }
 
-export default AddListModal;
+export default AddList;

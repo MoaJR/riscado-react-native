@@ -10,13 +10,13 @@ import {
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 
-import { styles } from "../styles/ListModalStyles";
-import ItemList from "./ItemList";
+import { styles } from "../styles/ListDetailsStyles";
+import ItemList from "../components/ItemList";
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { db } from "../config/FirebaseProvider";
 import { DataContext } from "../context/DataContext";
 
-function ListModal({ handleModal, item }) {
+function ListDetails({ handleModal, item }) {
   const { data } = useContext(DataContext);
 
   const [task, setTask] = useState("");
@@ -35,8 +35,9 @@ function ListModal({ handleModal, item }) {
       }, 1000);
       return;
     }
+    const date = new Date();
     const newTask = {
-      id: JSON.stringify(Date.now()),
+      id: date.toUTCString(),
       name: task,
       completed: false,
     };
@@ -135,4 +136,4 @@ function ListModal({ handleModal, item }) {
   );
 }
 
-export default ListModal;
+export default ListDetails;

@@ -2,7 +2,6 @@ import { useContext, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Animated,
-  Dimensions,
   FlatList,
   Modal,
   Text,
@@ -13,12 +12,12 @@ import { AntDesign } from "@expo/vector-icons";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../config/FirebaseProvider";
 
-import Logo from "./Logo";
+import Logo from "../components/Logo";
 import { styles } from "../styles/HomeStyles";
-import AddListModal from "./AddListModal";
-import ListCard from "./ListCard";
+import AddList from "./AddListModal";
+import ListCard from "../components/ListCard";
 import { DataContext } from "../context/DataContext";
-import PageCounter from "./PageCounter";
+import PageCounter from "../components/PageCounter";
 import { StatusBar } from "expo-status-bar";
 
 export default function Home() {
@@ -58,7 +57,7 @@ export default function Home() {
         animationType="slide"
         visible={modalVisible}
         onRequestClose={handleModal}>
-        <AddListModal onPress={handleModal} />
+        <AddList onPress={handleModal} />
       </Modal>
       <Logo />
       <TouchableOpacity

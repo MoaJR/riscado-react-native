@@ -5,7 +5,7 @@ import { deleteDoc, doc } from "firebase/firestore";
 
 import { styles } from "../styles/ListCardStyles";
 import ProgressBar from "./ProgressBar";
-import ListModal from "./ListModal";
+import ListDetails from "../pages/ListModal";
 import { db } from "../config/FirebaseProvider";
 
 function ListCard({ item, slideRef }) {
@@ -73,7 +73,7 @@ function ListCard({ item, slideRef }) {
         animationType="slide"
         visible={ListModalVisible}
         onRequestClose={handleShowListModal}>
-        <ListModal
+        <ListDetails
           handleModal={handleShowListModal}
           item={item}
         />
