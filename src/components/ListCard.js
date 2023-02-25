@@ -1,19 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Alert, Animated, Modal, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Animated, Text, TouchableOpacity, View } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { deleteDoc, doc } from "firebase/firestore";
 
 import { styles } from "../styles/ListCardStyles";
 import ProgressBar from "./ProgressBar";
-import ListDetails from "../pages/ListModal";
 import { db } from "../config/FirebaseProvider";
 
 function ListCard({ item, slideRef }) {
   const [deleteVisible, setDeleteVisible] = useState(false);
-  const [ListModalVisible, setListModalVisible] = useState(false);
 
-  const handleShowListModal = () => {
-    deleteVisible ? setDeleteVisible(false) : setListModalVisible(!ListModalVisible);
+  const handleNavigate = () => {
+    deleteVisible ? setDeleteVisible(false) : null; //arrumar aqui
   };
 
   const deleteById = async (id) => {
@@ -69,18 +67,9 @@ function ListCard({ item, slideRef }) {
 
   return (
     <View style={styles.container}>
-      <Modal
-        animationType="slide"
-        visible={ListModalVisible}
-        onRequestClose={handleShowListModal}>
-        <ListDetails
-          handleModal={handleShowListModal}
-          item={item}
-        />
-      </Modal>
       <TouchableOpacity
         onLongPress={handleShowDelete}
-        onPress={handleShowListModal}
+        onPress={handleNavigate}
         style={[styles.card, { backgroundColor: item.backgroundColor }]}>
         <Text
           numberOfLines={1}

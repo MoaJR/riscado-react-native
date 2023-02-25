@@ -14,7 +14,7 @@ import {
 import { styles } from "../styles/AddListStyles";
 import { db } from "../config/FirebaseProvider";
 
-function AddList({ onPress: handleModal }) {
+function AddList() {
   const colorsArray = [
     "#5CD859",
     "#2bbef7",
@@ -54,7 +54,7 @@ function AddList({ onPress: handleModal }) {
       return;
     }
     addList();
-    handleModal();
+
     Keyboard.dismiss();
   };
 
@@ -65,7 +65,7 @@ function AddList({ onPress: handleModal }) {
       <Text style={styles.title}>Criar Lista</Text>
       <TouchableOpacity
         style={styles.closeModalButton}
-        onPress={handleModal}>
+        onPress={() => {}}>
         <AntDesign
           name="left"
           style={styles.backIcon}

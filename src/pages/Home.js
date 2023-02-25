@@ -3,7 +3,6 @@ import {
   ActivityIndicator,
   Animated,
   FlatList,
-  Modal,
   Text,
   TouchableOpacity,
   View,
@@ -14,7 +13,7 @@ import { db } from "../config/FirebaseProvider";
 
 import Logo from "../components/Logo";
 import { styles } from "../styles/HomeStyles";
-import AddList from "./AddListModal";
+import AddList from "./AddList";
 import ListCard from "../components/ListCard";
 import { DataContext } from "../context/DataContext";
 import PageCounter from "../components/PageCounter";
@@ -23,12 +22,7 @@ import { StatusBar } from "expo-status-bar";
 export default function Home() {
   const { data, setData } = useContext(DataContext);
 
-  const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(true);
-
-  const handleModal = () => {
-    setModalVisible(!modalVisible);
-  };
 
   useEffect(() => {
     setLoading(true);
@@ -53,16 +47,10 @@ export default function Home() {
           />
         </View>
       ) : null}
-      <Modal
-        animationType="slide"
-        visible={modalVisible}
-        onRequestClose={handleModal}>
-        <AddList onPress={handleModal} />
-      </Modal>
       <Logo />
       <TouchableOpacity
         style={styles.addContainer}
-        onPress={handleModal}>
+        onPress={() => {}}>
         <View style={styles.addButton}>
           <AntDesign
             name="plus"
