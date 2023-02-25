@@ -39,13 +39,24 @@ export const styles = StyleSheet.create({
     zIndex: -1,
     maxHeight: '33%',
   },
-  loadingContainer: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
-    backgroundColor: colors.white,
+  profileButtonContainer: {
     alignItems: 'center',
     justifyContent: 'center',
+    marginVertical: 20,
     position: 'absolute',
-    zIndex: 20,
+    bottom: 10,
+    right: 30,
   },
+  profileButton: {
+    borderRadius: 30,
+    backgroundColor: colors.lightGray,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10,
+  },
+  profileIcon: {
+    fontSize: 20,
+    color: colors.white,
+    fontWeight: 'bold',
+  }
 });

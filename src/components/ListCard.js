@@ -7,13 +7,13 @@ import { styles } from "../styles/ListCardStyles";
 import ProgressBar from "./ProgressBar";
 import { db } from "../config/FirebaseProvider";
 
-function ListCard({ item, slideRef, navigation }) {
+function ListCard({ item, navigation }) {
   const [deleteVisible, setDeleteVisible] = useState(false);
 
   const handleNavigate = () => {
     deleteVisible
       ? setDeleteVisible(false)
-      : navigation.navigate("ListDetails", { item: item }); //arrumar aqui
+      : navigation.navigate("ListDetails", { item: item });
   };
 
   const deleteById = async (id) => {
@@ -33,7 +33,6 @@ function ListCard({ item, slideRef, navigation }) {
         {
           text: "Deletar",
           onPress: () => {
-            slideRef.current.scrollToItem({ item: item });
             deleteById(item.id);
           },
         },

@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
+import { StatusBar } from "expo-status-bar";
 import {
-  ActivityIndicator,
   Animated,
   FlatList,
   Text,
@@ -8,19 +8,21 @@ import {
   View,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
+// firebase
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../config/FirebaseProvider";
-
+// components
 import Logo from "../components/Logo";
-import { styles } from "../styles/HomeStyles";
-import AddList from "./AddList";
-import ListCard from "../components/ListCard";
-import { DataContext } from "../context/DataContext";
 import PageCounter from "../components/PageCounter";
-import { StatusBar } from "expo-status-bar";
+import ListCard from "../components/ListCard";
+import Loading from "../components/Loading";
+// styles
+import { styles } from "../styles/HomeStyles";
+//context
+import { DataContext } from "../context/DataContext";
 
 export default function Home({navigation}) {
-  const { data, setData } = useContext(DataContext);
+  const { data, setData, user } = useContext(DataContext);
 
   const [loading, setLoading] = useState(true);
 
@@ -40,12 +42,7 @@ export default function Home({navigation}) {
   return (
     <View style={styles.container}>
       {loading ? (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator
-            size="large"
-            color="#2bbef7"
-          />
-        </View>
+        <Loading />
       ) : null}
       <Logo />
       <TouchableOpacity
@@ -78,11 +75,23 @@ export default function Home({navigation}) {
             data={data}
             horizontal
             keyExtractor={(item) => item.id}
-            renderItem={({ item }) => <ListCard item={item} slideRef={slideRef} navigation={navigation} />}
+            onContentSizeChange={() => slideRef.current.scrollToEnd()}
+            renderItem={({ item }) => <ListCard item={item} navigation={navigation}/>}
           />
         ) : null}
       </View>
       <PageCounter scrollX={scrollX} slideRef={slideRef} />
+      <View style={styles.profileButtonContainer}>
+        <TouchableOpacity
+          style={styles.profileButton}
+          onPress={() => navigation.navigate("Profile")}
+        >
+          <AntDesign
+            name="user"
+            style={styles.profileIcon}
+          />
+        </TouchableOpacity>
+      </View>
       <StatusBar style="auto" />
     </View>
   );

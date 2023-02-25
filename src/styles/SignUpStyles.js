@@ -5,27 +5,27 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  loginButton: {
+  signupButton: {
     height: 50,
     width: 150,
-    backgroundColor: colors.primary,
+    backgroundColor: colors.secondary,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 10,
     marginVertical: 10,
   },
-  loginButtonText: {
+  signupButtonText: {
     color: colors.white,
     fontWeight: "bold",
   },
-  signupButton: {
+  signinButton: {
     marginVertical: 10,
   },
   signUpButtonText: {
-    color: colors.secondary,
+    color: colors.primary,
     fontWeight: "bold",
   },
   logo: {

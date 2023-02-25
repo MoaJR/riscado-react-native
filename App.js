@@ -9,6 +9,7 @@ import AddList from './src/pages/AddList';
 import Home from './src/pages/Home';
 import ListDetails from './src/pages/ListDetails';
 import Login from './src/pages/Login';
+import Profile from './src/pages/Profile';
 import SignUp from './src/pages/SignUp';
 
 export default function App() {
@@ -20,6 +21,7 @@ export default function App() {
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="SignUp" component={SignUp} />
           <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen name="Profile" component={Profile} />
           <Stack.Screen name="AddList" component={AddList} />
           <Stack.Screen name="ListDetails" component={ListDetails} />
         </Stack.Navigator>
