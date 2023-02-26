@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { doc, setDoc } from "firebase/firestore";
 import { AntDesign } from "@expo/vector-icons";
 import {
@@ -13,6 +13,8 @@ import {
 
 import { styles } from "../styles/AddListStyles";
 import { db } from "../config/FirebaseProvider";
+import { DataContext } from "../context/DataContext";
+import BackButton from "../components/BackButton";
 
 function AddList({ navigation }) {
   const colorsArray = [
@@ -25,6 +27,7 @@ function AddList({ navigation }) {
     "#f5874d",
   ];
 
+  const {user} = useContext(DataContext);
   const [name, setName] = useState("");
   const [color, setColor] = useState(
     colorsArray[Math.floor(Math.random() * colorsArray.length)]
@@ -33,7 +36,6 @@ function AddList({ navigation }) {
   const [loading, setLoading] = useState(false);
 
   const addList = async () => {
-    setLoading(true);
     const date = new Date();
     const listObject = {
       id: date.toUTCString(),
@@ -41,8 +43,12 @@ function AddList({ navigation }) {
       backgroundColor: color,
       todos: [],
     };
-    await setDoc(doc(db, "tasks", listObject.id), listObject);
-    setLoading(false);
+    await setDoc(doc(db, user.uid, listObject.id), listObject)
+      .then(() => {
+        setLoading(false);
+      }).catch((error) => {
+        console.log(error);
+        });    
   };
 
   const addListSubmit = () => {
@@ -53,6 +59,7 @@ function AddList({ navigation }) {
       }, 1000);
       return;
     }
+    setLoading(true);
     addList();
     navigation.goBack();
     Keyboard.dismiss();
@@ -63,14 +70,6 @@ function AddList({ navigation }) {
       style={styles.container}
       behavior="height">
       <Text style={styles.title}>Criar Lista</Text>
-      <TouchableOpacity
-        style={styles.closeButton}
-        onPress={() => navigation.goBack()}>
-        <AntDesign
-          name="left"
-          style={styles.backIcon}
-        />
-      </TouchableOpacity>
       <TextInput
         autoFocus
         style={styles.input}
@@ -103,6 +102,7 @@ function AddList({ navigation }) {
           </Text>
         )}
       </TouchableOpacity>
+      <BackButton navigation={navigation} />
     </KeyboardAvoidingView>
   );
 }

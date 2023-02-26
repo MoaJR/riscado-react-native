@@ -32,4 +32,13 @@ export const styles = StyleSheet.create({
     position: "absolute",
     top: 40,
   },
+  registerContainer: {
+    position: "absolute",
+    bottom: 30,
+  },
+  errorText: {
+    color: colors.danger,
+    fontSize: 12,
+    fontWeight: "bold",
+  },
 });

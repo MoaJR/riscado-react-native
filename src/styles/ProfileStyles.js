@@ -8,6 +8,19 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  profilePictureContainer: {
+    width: 80,
+    height: 80,
+    borderRadius: 50,
+    backgroundColor: colors.colorsProfile[Math.floor(Math.random() * colors.colorsProfile.length)],
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 10,
+  },
+  profilePictureText: {
+    fontSize: 40,
+    color: colors.white,
+  },
   name: {
     fontSize: 18,
     color: colors.darkGray,
@@ -17,12 +30,16 @@ export const styles = StyleSheet.create({
     color: colors.darkGray,
     fontWeight: "bold",
   },
+  logoutContainer: {
+    position: "absolute",
+    bottom: 20,
+  },
   buttonLogout: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: colors.danger,
+    backgroundColor: colors.lightGray,
     borderRadius: 10,
-    paddingHorizontal: 15,
+    paddingHorizontal: 25,
     paddingVertical: 5,
     marginVertical: 10,
   },
@@ -34,9 +51,21 @@ export const styles = StyleSheet.create({
   iconlogout: {
     fontSize: 17,
     color: colors.white,
+    transform: [{ rotate: "180deg" }],
   },
-  logoutContainer: {
-    position: "absolute",
-    bottom: 15,
+  deleteAccountButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 30,
+  },
+  deleteAccouontIcon: {
+    fontSize: 15,
+    color: colors.danger,
+  },
+  deleteAccountText: {
+    fontSize: 13,
+    color: colors.danger,
+    marginLeft: 10,
   },
 });

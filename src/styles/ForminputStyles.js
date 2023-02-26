@@ -22,4 +22,12 @@ export const styles = StyleSheet.create({
     left: 10,
     top: 10,
   },
+  iconPassword: {
+    fontSize: 20,
+  },
+  passwordContainer: {
+    position: "absolute",
+    right: 10,
+    top: 10,
+  }
 });

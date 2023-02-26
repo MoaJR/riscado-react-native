@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Alert, Animated, Text, TouchableOpacity, View } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { deleteDoc, doc } from "firebase/firestore";
@@ -6,8 +6,11 @@ import { deleteDoc, doc } from "firebase/firestore";
 import { styles } from "../styles/ListCardStyles";
 import ProgressBar from "./ProgressBar";
 import { db } from "../config/FirebaseProvider";
+import { DataContext } from "../context/DataContext";
 
-function ListCard({ item, navigation }) {
+function ListCard({ item, navigation, listRef, index, data }) {
+  const { user } = useContext(DataContext);
+
   const [deleteVisible, setDeleteVisible] = useState(false);
 
   const handleNavigate = () => {
@@ -17,7 +20,7 @@ function ListCard({ item, navigation }) {
   };
 
   const deleteById = async (id) => {
-    const tasksRef = await doc(db, "tasks", id);
+    const tasksRef = await doc(db, user.uid, id);
     await deleteDoc(tasksRef);
   };
 
@@ -33,6 +36,11 @@ function ListCard({ item, navigation }) {
         {
           text: "Deletar",
           onPress: () => {
+            if (index > 0 && index === data.length - 1) {
+              listRef.current.scrollToIndex({
+                animated: true,
+                index: index - 1,
+              });            }
             deleteById(item.id);
           },
         },

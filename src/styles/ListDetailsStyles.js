@@ -28,17 +28,7 @@ export const styles = StyleSheet.create({
     color: colors.darkGray,
     marginBottom: 20,
   },
-  closeButton: {
-    position: 'absolute',
-    top: 80,
-    left: 20,
-    padding: 5,
-  },
-  backIcon: {
-    fontSize: 25,
-    color: colors.darkGray,
-    fontWeight: 'bold',
-  },
+
   input: {
     borderWidth: 1,
     borderColor: colors.lightGray,

@@ -1,53 +1,39 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { StatusBar } from "expo-status-bar";
-import {
-  Animated,
-  FlatList,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Animated, FlatList, Text, TouchableOpacity, View } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-// firebase
-import { collection, onSnapshot } from "firebase/firestore";
-import { db } from "../config/FirebaseProvider";
 // components
 import Logo from "../components/Logo";
 import PageCounter from "../components/PageCounter";
 import ListCard from "../components/ListCard";
-import Loading from "../components/Loading";
 // styles
 import { styles } from "../styles/HomeStyles";
 //context
 import { DataContext } from "../context/DataContext";
+// firebase
+import { db } from "../config/FirebaseProvider";
+import { collection, onSnapshot } from "firebase/firestore";
 
-export default function Home({navigation}) {
-  const { data, setData, user } = useContext(DataContext);
-
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    setLoading(true);
-    onSnapshot(collection(db, "tasks"), (snapshot) => {
-      const lists = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-      setData(lists);
-    });
-    setLoading(false);
-  }, []);
+export default function Home({ navigation }) {
+  const { data, user, setData } = useContext(DataContext);
 
   const scrollX = useRef(new Animated.Value(0)).current;
 
   const slideRef = useRef(null);
 
+  useEffect(() => {
+    onSnapshot(collection(db, user.uid), (snapshot) => {
+      const lists = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+      setData(lists);
+    });
+  }, []);
+
   return (
     <View style={styles.container}>
-      {loading ? (
-        <Loading />
-      ) : null}
       <Logo />
       <TouchableOpacity
         style={styles.addContainer}
-        onPress={() => navigation.navigate('AddList')}>
+        onPress={() => navigation.navigate("AddList")}>
         <View style={styles.addButton}>
           <AntDesign
             name="plus"
@@ -75,17 +61,26 @@ export default function Home({navigation}) {
             data={data}
             horizontal
             keyExtractor={(item) => item.id}
-            onContentSizeChange={() => slideRef.current.scrollToEnd()}
-            renderItem={({ item }) => <ListCard item={item} navigation={navigation}/>}
+            renderItem={({ item, index }) => (
+              <ListCard
+                item={item}
+                navigation={navigation}
+                listRef={slideRef}
+                index={index}
+                data={data}
+              />
+            )}
           />
         ) : null}
       </View>
-      <PageCounter scrollX={scrollX} slideRef={slideRef} />
+      <PageCounter
+        scrollX={scrollX}
+        slideRef={slideRef}
+      />
       <View style={styles.profileButtonContainer}>
         <TouchableOpacity
           style={styles.profileButton}
-          onPress={() => navigation.navigate("Profile")}
-        >
+          onPress={() => navigation.navigate("Profile")}>
           <AntDesign
             name="user"
             style={styles.profileIcon}

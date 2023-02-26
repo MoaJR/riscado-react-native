@@ -15,10 +15,11 @@ import ItemList from "../components/ItemList";
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { db } from "../config/FirebaseProvider";
 import { DataContext } from "../context/DataContext";
+import BackButton from "../components/BackButton";
 
 function ListDetails({ route, navigation }) {
   const { item } = route.params;
-  const { data } = useContext(DataContext);
+  const { data, user } = useContext(DataContext);
 
   const [task, setTask] = useState("");
   const [error, setError] = useState(false);
@@ -26,7 +27,7 @@ function ListDetails({ route, navigation }) {
   const taskList = data.find((list) => list.id === item.id).todos;
   const refInput = useRef();
 
-  const docRef = doc(db, "tasks", item.id);
+  const docRef = doc(db, user.uid, item.id);
 
   const addTask = async () => {
     if (task === "") {
@@ -125,14 +126,7 @@ function ListDetails({ route, navigation }) {
           </View>
         )}
       </ScrollView>
-      <TouchableOpacity
-        style={styles.closeButton}
-        onPress={() => navigation.navigate('Home')}>
-        <AntDesign
-          name="left"
-          style={styles.backIcon}
-        />
-      </TouchableOpacity>
+      <BackButton navigation={navigation} />
     </KeyboardAvoidingView>
   );
 }
