@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "riscado",
+    "name": "Riscado",
     "slug": "riscado",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -29,6 +29,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "523e05ef-9897-409d-98d6-e6fadc6e1216"
+      }
+    },
+    "owner": "moacirfonsecajr"
   }
 }
