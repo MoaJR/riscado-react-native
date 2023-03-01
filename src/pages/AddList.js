@@ -68,7 +68,7 @@ function AddList({ navigation }) {
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior="height">
+      behavior="padding">
       <Text style={styles.title}>Criar Lista</Text>
       <TextInput
         autoFocus

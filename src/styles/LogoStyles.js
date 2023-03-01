@@ -1,11 +1,11 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import {colors} from "./colors";
 
 export const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     position: 'absolute',
-    top: 80,
+    top: Dimensions.get('window').height * 0.1,
   },
   title: {
     fontSize: 40,

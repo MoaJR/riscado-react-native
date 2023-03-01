@@ -5,15 +5,15 @@ import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 import { styles } from "../styles/ForminputStyles";
 import { colors } from "../styles/colors";
 
-const FormInput = ({ refInner, onChangeText, iconName, isPassword, ...props }) => {
+const FormInput = ({ refInner, onChangeText, iconName, isPassword = false, ...props }) => {
   const [isFocused, setIsFocused] = React.useState(false);
-  const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = React.useState(isPassword);
 
   return (
     <View style={styles.inputContainer}>
       <TextInput
         {...props}
-        secureTextEntry={!isPasswordVisible}
+        secureTextEntry={isPasswordVisible}
         ref={refInner}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
