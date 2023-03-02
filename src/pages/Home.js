@@ -1,6 +1,14 @@
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import { Animated, FlatList, Text, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  Animated,
+  BackHandler,
+  FlatList,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 // components
 import Logo from "../components/Logo";
@@ -26,6 +34,28 @@ export default function Home({ navigation }) {
       const lists = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
       setData(lists);
     });
+  }, []);
+
+  useEffect(() => {
+    const callback = () => {
+      Alert.alert(
+        "Sair do App",
+        "Você tem certeza que deseja sair do app?",
+        [
+          {
+            text: "Cancelar",
+            onPress: () => {},
+            style: "cancel",
+          },
+          { text: "Sair", style: "destructive", onPress: () => BackHandler.exitApp() },
+        ],
+        { cancelable: false }
+      );
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener("hardwareBackPress", callback);
+
+    return () => backHandler.remove();
   }, []);
 
   return (

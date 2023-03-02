@@ -22,6 +22,7 @@ export const styles = StyleSheet.create({
     color: colors.white,
     fontWeight: 'bold',
     textAlign: 'center',
+    width: '80%',
   },
   defaultText: {
     fontSize: 15,

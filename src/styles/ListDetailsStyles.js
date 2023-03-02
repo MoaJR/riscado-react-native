@@ -14,6 +14,8 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
     color: colors.darkGray,
+    textAlign: 'center',
+    width: '80%',
   },
   trace: {
     height: 5,

@@ -37,9 +37,8 @@ function ListDetails({ route, navigation }) {
       }, 1000);
       return;
     }
-    const date = new Date();
     const newTask = {
-      id: date.toUTCString(),
+      id: Date.now().toString(),
       name: task,
       completed: false,
     };

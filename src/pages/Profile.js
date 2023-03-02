@@ -1,5 +1,5 @@
 import { View, Text, Alert, TouchableOpacity } from "react-native";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { AntDesign } from "@expo/vector-icons";
 // firebase
 import { auth } from "../config/FirebaseProvider";
@@ -67,11 +67,6 @@ const Profile = ({ navigation }) => {
       </View>
       <Text style={styles.title}>{displayName}</Text>
       <Text style={styles.email}>{email}</Text>
-      {/* <TouchableOpacity
-          style={styles.buttonLogout}
-          onPress={() => console.log(user)}>
-          <Text>Log</Text>
-        </TouchableOpacity> */}
       <View style={styles.logoutContainer}>
         <TouchableOpacity
           style={styles.buttonLogout}

@@ -5,6 +5,7 @@ import {
   ActivityIndicator,
   Keyboard,
   KeyboardAvoidingView,
+  Platform,
   Text,
   TextInput,
   TouchableOpacity,
@@ -27,7 +28,7 @@ function AddList({ navigation }) {
     "#f5874d",
   ];
 
-  const {user} = useContext(DataContext);
+  const { user } = useContext(DataContext);
   const [name, setName] = useState("");
   const [color, setColor] = useState(
     colorsArray[Math.floor(Math.random() * colorsArray.length)]
@@ -36,9 +37,8 @@ function AddList({ navigation }) {
   const [loading, setLoading] = useState(false);
 
   const addList = async () => {
-    const date = new Date();
     const listObject = {
-      id: date.toUTCString(),
+      id: Date.now().toString(),
       name: `${name.charAt(0).toUpperCase()}${name.slice(1)}`,
       backgroundColor: color,
       todos: [],
@@ -46,12 +46,13 @@ function AddList({ navigation }) {
     await setDoc(doc(db, user.uid, listObject.id), listObject)
       .then(() => {
         setLoading(false);
-      }).catch((error) => {
+      })
+      .catch((error) => {
         console.log(error);
-        });    
+      });
   };
 
-  const addListSubmit = () => {
+  const addListSubmit = async () => {
     if (name === "") {
       setError(true);
       setTimeout(() => {
@@ -60,7 +61,7 @@ function AddList({ navigation }) {
       return;
     }
     setLoading(true);
-    addList();
+    await addList();
     navigation.goBack();
     Keyboard.dismiss();
   };
@@ -68,7 +69,7 @@ function AddList({ navigation }) {
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior="padding">
+      behavior={Platform.OS === "ios" ? "padding" : "height"}>
       <Text style={styles.title}>Criar Lista</Text>
       <TextInput
         autoFocus
@@ -88,18 +89,16 @@ function AddList({ navigation }) {
           />
         ))}
       </View>
-      <TouchableOpacity style={[styles.createButton, { backgroundColor: color }]}>
+      <TouchableOpacity
+        style={[styles.createButton, { backgroundColor: color }]}
+        onPress={addListSubmit}>
         {loading ? (
           <ActivityIndicator
             size="small"
             color="#fff"
           />
         ) : (
-          <Text
-            style={styles.createButtonText}
-            onPress={addListSubmit}>
-            Adicionar
-          </Text>
+          <Text style={styles.createButtonText}>Adicionar</Text>
         )}
       </TouchableOpacity>
       <BackButton navigation={navigation} />
