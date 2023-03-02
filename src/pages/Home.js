@@ -61,17 +61,6 @@ export default function Home({ navigation }) {
   return (
     <View style={styles.container}>
       <Logo />
-      <TouchableOpacity
-        style={styles.addContainer}
-        onPress={() => navigation.navigate("AddList")}>
-        <View style={styles.addButton}>
-          <AntDesign
-            name="plus"
-            style={styles.addIcon}
-          />
-        </View>
-        <Text style={styles.subtitleText}>Adicionar Lista</Text>
-      </TouchableOpacity>
       <View style={styles.listsContainer}>
         {data.length > 0 ? (
           <FlatList
@@ -107,6 +96,19 @@ export default function Home({ navigation }) {
         scrollX={scrollX}
         slideRef={slideRef}
       />
+
+      <TouchableOpacity
+        style={styles.addContainer}
+        onPress={() => navigation.navigate("AddList")}>
+        <View style={styles.addButton}>
+          <AntDesign
+            name="plus"
+            style={styles.addIcon}
+          />
+        </View>
+        <Text style={styles.subtitleText}>Adicionar Lista</Text>
+      </TouchableOpacity>
+
       <View style={styles.profileButtonContainer}>
         <TouchableOpacity
           style={styles.profileButton}
