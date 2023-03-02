@@ -5,6 +5,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { styles } from "../styles/ItemListStyles";
 import { colors } from "../styles/colors";
 import { GestureHandlerRootView, Swipeable } from "react-native-gesture-handler";
+import Animated, { FadeInRight, FadeOutLeft, Layout } from "react-native-reanimated";
 
 export default function ItemList({ item, onPress, onLongPress }) {
   const checkCompleted = () => {
@@ -41,7 +42,8 @@ export default function ItemList({ item, onPress, onLongPress }) {
   };
 
   return (
-    <GestureHandlerRootView>
+    <Animated.View entering={FadeInRight} exiting={FadeOutLeft} layout={Layout}>
+      <GestureHandlerRootView>
       <Swipeable renderRightActions={(_, dragX) => rightActions(dragX, item.id)}>
         <View style={styles.container}>
           <TouchableOpacity
@@ -63,5 +65,6 @@ export default function ItemList({ item, onPress, onLongPress }) {
         </View>
       </Swipeable>
     </GestureHandlerRootView>
+    </Animated.View>
   );
 }

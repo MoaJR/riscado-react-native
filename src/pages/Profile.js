@@ -9,6 +9,7 @@ import { styles } from "../styles/ProfileStyles";
 // context
 import { DataContext } from "../context/DataContext";
 import BackButton from "../components/BackButton";
+import Animated from "react-native-reanimated";
 
 const Profile = ({ navigation }) => {
   const { user } = useContext(DataContext);
