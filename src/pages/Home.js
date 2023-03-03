@@ -2,10 +2,9 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import {
   Alert,
-  Animated,
+  Animated as AnimatedRN,
   BackHandler,
   FlatList,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -21,13 +20,54 @@ import { DataContext } from "../context/DataContext";
 // firebase
 import { db } from "../config/FirebaseProvider";
 import { collection, onSnapshot } from "firebase/firestore";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+  withTiming,
+} from "react-native-reanimated";
+import { colors } from "../styles/colors";
 
 export default function Home({ navigation }) {
   const { data, user, setData } = useContext(DataContext);
 
-  const scrollX = useRef(new Animated.Value(0)).current;
+  const scrollX = useRef(new AnimatedRN.Value(0)).current;
+
+  const offset = useSharedValue(0);
 
   const slideRef = useRef(null);
+
+  const animatedToggleMenu = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          rotate: withSpring(`${offset.value}deg`, {
+            velocity: 0.1,
+          }),
+        },
+        {
+          scale: withSpring(offset.value === 0 ? 1 : 0.6),
+        },
+      ],
+      backgroundColor: offset.value === 0 ? colors.primary : colors.danger,
+    };
+  });
+
+  const animatedMenu = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          rotate: withSpring(`${offset.value === 0 ? 180:  0}deg`, {
+            damping: 25,
+          }),
+        },
+        {
+          scale: withTiming(offset.value === 0 ? 0 : 1),
+        },
+      ],
+      opacity: withTiming(offset.value === 0 ? 0 : 1),
+    };
+  });
 
   useEffect(() => {
     onSnapshot(collection(db, user.uid), (snapshot) => {
@@ -70,7 +110,7 @@ export default function Home({ navigation }) {
             bounces={false}
             pagingEnabled
             ref={slideRef}
-            onScroll={Animated.event(
+            onScroll={AnimatedRN.event(
               [{ nativeEvent: { contentOffset: { x: scrollX } } }],
               { useNativeDriver: false }
             )}
@@ -98,27 +138,47 @@ export default function Home({ navigation }) {
       />
 
       <TouchableOpacity
-        style={styles.addContainer}
-        onPress={() => navigation.navigate("AddList")}>
-        <View style={styles.addButton}>
+        style={[styles.addContainer]}
+        onPress={() => {
+          offset.value = offset.value === 0 ? -45 : 0;
+        }}>
+        <Animated.View style={[styles.addButton, animatedToggleMenu]}>
           <AntDesign
             name="plus"
             style={styles.addIcon}
           />
-        </View>
-        <Text style={styles.subtitleText}>Adicionar Lista</Text>
+        </Animated.View>
       </TouchableOpacity>
 
-      <View style={styles.profileButtonContainer}>
+      <Animated.View style={[styles.menuContainer, animatedMenu]}>
         <TouchableOpacity
-          style={styles.profileButton}
           onPress={() => navigation.navigate("Profile")}>
-          <AntDesign
-            name="user"
-            style={styles.profileIcon}
-          />
+          <View style={styles.profileButton}>
+            <AntDesign
+              name="user"
+              style={styles.menuIcon}
+            />
+          </View>
         </TouchableOpacity>
-      </View>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("AddList")}>
+          <View style={styles.newList}>
+            <AntDesign
+              name="plus"
+              style={styles.menuIcon}
+            />
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("AddList")}>
+          <View style={styles.history}>
+            <AntDesign
+              name="setting"
+              style={styles.menuIcon}
+            />
+          </View>
+        </TouchableOpacity>
+      </Animated.View>
       <StatusBar style="auto" />
     </View>
   );

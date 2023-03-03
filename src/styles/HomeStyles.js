@@ -1,7 +1,7 @@
 import { Dimensions, StyleSheet } from "react-native";
 import { colors } from "./colors";
 
-const buttonSize = 40;
+const buttonSize = 60;
 
 export const styles = StyleSheet.create({
   container: {
@@ -19,16 +19,15 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   addIcon: {
-    fontSize: 25,
+    fontSize: 30,
     color: colors.white,
     fontWeight: 'bold',
   },
   addContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 20,
     position: 'absolute',
-    bottom: 15,
+    bottom: 50,
   },
   subtitleText: {
     fontSize: 15,
@@ -39,24 +38,44 @@ export const styles = StyleSheet.create({
     zIndex: -1,
     maxHeight: '33%',
   },
-  profileButtonContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginVertical: 20,
+  menuIcon: {
+    fontSize: 25,
+    color: colors.white,
+    fontWeight: 'bold',
+  },
+  menuContainer: {
     position: 'absolute',
-    bottom: 10,
-    right: 30,
+    bottom: 50,
+    transform: [{ translateY: 100}, {rotate: '180deg' }],
   },
   profileButton: {
-    borderRadius: 30,
+    borderRadius: 50,
     backgroundColor: colors.lightGray,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 10,
+    padding: 20,
+    position: 'absolute',
+    bottom: 80,
+    transform: [{ translateX: -100 }, { translateY: 50}],
   },
-  profileIcon: {
-    fontSize: 20,
-    color: colors.white,
-    fontWeight: 'bold',
-  }
+  newList: {
+    borderRadius: 50,
+    backgroundColor: colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+    position: 'absolute',
+    bottom: 80,
+    transform: [{ translateX: -32 }],
+  },
+  history: {
+    borderRadius: 50,
+    backgroundColor: colors.secondary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+    position: 'absolute',
+    bottom: 80,
+    transform: [{ translateX: 35 }, { translateY: 50}],
+  },
 });
